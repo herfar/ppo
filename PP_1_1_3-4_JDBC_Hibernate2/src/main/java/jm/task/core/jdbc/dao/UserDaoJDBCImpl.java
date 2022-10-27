@@ -28,13 +28,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            createUsersTable();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         try (PreparedStatement preparedStatement = Util.getConnection()
-                .prepareStatement("insert into Users values (1, ?, ?, ?)")) {
+                .prepareStatement("insert into Users values (id, ?, ?, ?)")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
@@ -56,11 +51,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        try {
-            createUsersTable();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         try (Statement statement = Util.getConnection().createStatement()) {
             ResultSet resultSet = statement.executeQuery("select * from Users");
             while (resultSet.next()) {
